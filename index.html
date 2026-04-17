@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>簿記４級 基礎トレーニング | Bookkeeping Level 4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ===== RESET & BASE ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; }
+body {
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+  background: #F5F2ED;
+  color: #1A1814;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== CSS VARIABLES ===== */
+:root {
+  --bg:        #F5F2ED;
+  --surface:   #FFFEF9;
+  --surface2:  #EFEDE6;
+  --border:    #D8D4C8;
+  --border2:   #C4BFB0;
+  --text:      #1A1814;
+  --text2:     #6B6760;
+  --text3:     #9E9B94;
+  --accent:    #3D4B8F;
+  --accent-lt: #E8EBFA;
+  --accent2:   #1E8C6B;
+  --accent2-lt:#E3F5EE;
+  --warn:      #B54A1E;
+  --warn-lt:   #FAEAE3;
+  --amber:     #9B6B1A;
+  --amber-lt:  #FDF3E0;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --shadow:    0 1px 4px rgba(0,0,0,0.08);
+}
+
+/* ===== LAYOUT ===== */
+.app-wrapper {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 0 0 80px;
+  min-height: 100vh;
+}
+
+/* ===== HEADER ===== */
+.app-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 16px 12px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+.app-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+  letter-spacing: -0.3px;
+}
+.app-title .level-badge {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 20px;
+  vertical-align: middle;
+  margin-right: 5px;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.5px;
+}
+.app-subtitle {
+  font-size: 11px;
+  color: var(--text3);
+  margin-top: 2px;
+  font-family: 'DM Mono', monospace;
+}
+.lang-toggle {
+  flex-shrink: 0;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 5px 14px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  color: var(--text);
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+.lang-toggle:hover { background: var(--border); }
+
+/* ===== TAB BAR ===== */
+.tab-bar {
+  display: flex;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 8px 12px 0;
+  gap: 4px;
+}
+.tab-btn {
+  flex: 1;
+  padding: 9px 8px;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text2);
+  cursor: pointer;
+  text-align: center;
+  transition: color 0.15s, border-color 0.15s;
+  line-height: 1.3;
+}
+.tab-btn.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+.tab-btn .tab-sub {
+  font-size: 10px;
+  font-family: 'DM Mono', monospace;
+  color: var(--text3);
+  display: block;
+  margin-top: 1px;
+}
+.tab-btn.active .tab-sub { color: var(--accent); opacity: 0.7; }
+
+/* ===== MAIN CONTENT ===== */
+.tab-content { display: none; padding: 16px; }
+.tab-content.active { display: block; }
+
+/* ===== SECTION TITLE ===== */
+.section-hint {
+  font-size: 13px;
+  color: var(--text2);
+  text-align: center;
+  margin-bottom: 14px;
+  padding: 10px 12px;
+  background: var(--amber-lt);
+  border-radius: var(--radius-md);
+  border: 1px solid #E8D4A8;
+  line-height: 1.5;
+}
+.section-hint .hint-en {
+  font-size: 11px;
+  font-family: 'DM Mono', monospace;
+  color: var(--amber);
+  display: block;
+  margin-top: 2px;
+}
+
+/* ===== EXERCISE 1: DRAG & DROP ===== */
+.statements-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.statement-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 10px 8px;
+  box-shadow: var(--shadow);
+}
+.statement-header {
+  text-align: center;
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.statement-name {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.4;
+}
+.statement-name ruby rt { font-size: 0.6em; color: var(--text3); font-weight: 400; }
+.statement-abbr {
+  font-size: 10px;
+  font-family: 'DM Mono', monospace;
+  color: var(--text3);
+  margin-top: 1px;
+}
+.statement-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px;
+}
+.col-group { display: flex; flex-direction: column; gap: 5px; }
+
+.zone-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-align: center;
+  padding: 4px 3px;
+  border-radius: var(--radius-sm);
+  line-height: 1.3;
+}
+.zone-label ruby rt { font-size: 0.65em; font-weight: 400; }
+.zone-label .lbl-en { font-size: 9px; font-family: 'DM Mono', monospace; display: block; opacity: 0.75; }
+
+.zone-label.lbl-left  { background: var(--accent-lt); color: var(--accent); }
+.zone-label.lbl-right { background: var(--warn-lt); color: var(--warn); }
+
+.drop-zone {
+  min-height: 52px;
+  border: 1.5px dashed var(--border2);
+  border-radius: var(--radius-md);
+  padding: 5px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-content: flex-start;
+  transition: background 0.15s, border-color 0.15s;
+  cursor: default;
+}
+.drop-zone.over    { background: var(--accent-lt); border-color: var(--accent); }
+.drop-zone.correct { background: var(--accent2-lt); border-color: var(--accent2); border-style: solid; }
+.drop-zone.wrong   { background: var(--warn-lt); border-color: var(--warn); border-style: solid; }
+
+.placed-chip {
+  font-size: 11px;
+  padding: 3px 7px;
+  background: var(--accent-lt);
+  color: var(--accent);
+  border: 1px solid #C0C9F0;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  white-space: nowrap;
+}
+.placed-chip:hover { opacity: 0.7; }
+.placed-chip ruby rt { font-size: 0.6em; }
+
+/* DRAG SOURCE CARDS */
+.drag-pool {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  padding: 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  margin-bottom: 12px;
+  min-height: 60px;
+  box-shadow: var(--shadow);
+}
+.drag-pool-label {
+  width: 100%;
+  font-size: 11px;
+  color: var(--text3);
+  text-align: center;
+  font-family: 'DM Mono', monospace;
+  margin-bottom: 4px;
+}
+.drag-card {
+  padding: 9px 14px;
+  background: var(--surface);
+  border: 1.5px solid var(--border2);
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  transition: transform 0.1s, box-shadow 0.1s, opacity 0.2s;
+  color: var(--text);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+}
+.drag-card:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.12); }
+.drag-card:active { cursor: grabbing; transform: scale(0.97); }
+.drag-card.placed { opacity: 0.35; cursor: not-allowed; }
+.drag-card ruby rt { font-size: 0.6em; color: var(--text3); font-weight: 400; }
+
+/* ===== BUTTONS ===== */
+.btn-primary {
+  width: 100%;
+  padding: 14px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-lg);
+  font-size: 15px;
+  font-weight: 700;
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  letter-spacing: 0.2px;
+}
+.btn-primary:hover  { background: #2E3A72; }
+.btn-primary:active { transform: scale(0.98); }
+
+.btn-secondary {
+  width: 100%;
+  padding: 12px;
+  background: var(--surface2);
+  color: var(--text2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  font-size: 14px;
+  font-weight: 500;
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+  cursor: pointer;
+  transition: background 0.15s;
+  margin-top: 8px;
+}
+.btn-secondary:hover { background: var(--border); }
+
+.btn-success {
+  width: 100%;
+  padding: 14px;
+  background: var(--accent2);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-lg);
+  font-size: 15px;
+  font-weight: 700;
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+}
+.btn-success:hover  { background: #166B52; }
+.btn-success:active { transform: scale(0.98); }
+
+/* ===== RESULT MESSAGE ===== */
+.result-banner {
+  display: none;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  margin-top: 10px;
+  line-height: 1.5;
+}
+.result-banner.ok { background: var(--accent2-lt); color: #145A40; border: 1px solid #8ED1B8; }
+.result-banner.ng { background: var(--warn-lt);   color: var(--warn);  border: 1px solid #F0B898; }
+.result-banner .result-en { font-size: 11px; font-family: 'DM Mono', monospace; font-weight: 400; opacity: 0.8; display: block; margin-top: 4px; }
+
+/* ===== EXERCISE 2: QUIZ ===== */
+.quiz-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.quiz-progress {
+  font-size: 13px;
+  font-family: 'DM Mono', monospace;
+  color: var(--text2);
+  font-weight: 500;
+}
+.score-dots {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.score-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--border2);
+  transition: background 0.2s;
+}
+.score-dot.ok { background: var(--accent2); }
+.score-dot.ng { background: var(--warn); }
+
+.account-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 28px 20px 22px;
+  text-align: center;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+.account-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: var(--accent);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+.account-num {
+  font-size: 11px;
+  font-family: 'DM Mono', monospace;
+  color: var(--text3);
+  margin-bottom: 8px;
+}
+.account-kanji {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+  line-height: 1.2;
+}
+.account-kanji ruby rt { font-size: 0.4em; font-weight: 400; color: var(--text3); }
+.account-reading {
+  font-size: 13px;
+  color: var(--text2);
+  margin-bottom: 4px;
+  font-family: 'DM Mono', monospace;
+}
+.account-english {
+  font-size: 15px;
+  color: var(--accent);
+  font-weight: 500;
+  font-family: 'DM Mono', monospace;
+}
+
+.feedback-msg {
+  display: none;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+.feedback-msg.ok { background: var(--accent2-lt); color: #145A40; border: 1px solid #8ED1B8; display: block; }
+.feedback-msg.ng { background: var(--warn-lt);   color: var(--warn);  border: 1px solid #F0B898; display: block; }
+.feedback-msg .fb-en { font-size: 11px; font-family: 'DM Mono', monospace; font-weight: 400; opacity: 0.8; display: block; margin-top: 3px; }
+
+.cat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.cat-btn {
+  padding: 14px 8px;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: center;
+  color: var(--text);
+  transition: background 0.15s, border-color 0.15s, transform 0.1s;
+  line-height: 1.3;
+  box-shadow: var(--shadow);
+}
+.cat-btn:hover:not(:disabled) { background: var(--accent-lt); border-color: var(--accent); transform: translateY(-1px); }
+.cat-btn:active:not(:disabled) { transform: scale(0.97); }
+.cat-btn ruby rt { font-size: 0.55em; font-weight: 400; color: var(--text3); }
+.cat-btn .cat-en { font-size: 10px; font-family: 'DM Mono', monospace; color: var(--text3); display: block; margin-top: 2px; }
+.cat-btn.correct { background: var(--accent2-lt); border-color: var(--accent2); color: #145A40; }
+.cat-btn.correct .cat-en { color: var(--accent2); }
+.cat-btn.wrong   { background: var(--warn-lt); border-color: var(--warn); color: var(--warn); }
+.cat-btn.reveal  { background: var(--accent-lt); border-color: var(--accent); color: var(--accent); }
+.cat-btn:disabled { cursor: default; }
+
+/* ===== SCORE SUMMARY ===== */
+.score-summary {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow);
+}
+.score-big {
+  font-size: 52px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  color: var(--accent);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.score-label {
+  font-size: 13px;
+  color: var(--text2);
+}
+.score-pct {
+  font-size: 22px;
+  font-family: 'DM Mono', monospace;
+  color: var(--text2);
+  margin-top: 6px;
+}
+
+/* ===== RUBY ===== */
+ruby rt { font-size: 0.6em; color: var(--text3); }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 360px) {
+  .statements-grid { grid-template-columns: 1fr; }
+  .account-kanji { font-size: 26px; }
+}
+</style>
+</head>
+<body>
+
+<div class="app-wrapper">
+
+  <!-- ===== HEADER ===== -->
+  <header class="app-header">
+    <div class="header-row">
+      <div>
+        <div class="app-title" id="app-title">
+          <span class="level-badge">4級</span>
+          <ruby>簿記<rt>ぼき</rt></ruby>
+          <ruby>基礎<rt>きそ</rt></ruby>トレーニング
+        </div>
+        <div class="app-subtitle" id="app-subtitle">Bookkeeping — Basic Training</div>
+      </div>
+      <button class="lang-toggle" id="lang-btn" onclick="toggleLang()">English</button>
+    </div>
+  </header>
+
+  <!-- ===== TAB BAR ===== -->
+  <nav class="tab-bar">
+    <button class="tab-btn active" id="tab1" onclick="showTab(1)">
+      <span id="tab1-main"><ruby>表<rt>ひょう</rt></ruby>の<ruby>位置<rt>いち</rt></ruby></span>
+      <span class="tab-sub" id="tab1-sub">Position</span>
+    </button>
+    <button class="tab-btn" id="tab2" onclick="showTab(2)">
+      <span id="tab2-main"><ruby>分類<rt>ぶんるい</rt></ruby>クイズ</span>
+      <span class="tab-sub" id="tab2-sub">Classification Quiz</span>
+    </button>
+  </nav>
+
+  <!-- ===== EXERCISE 1: POSITION ===== -->
+  <div class="tab-content active" id="ex1">
+    <div class="section-hint">
+      <span id="ex1-hint">カードをドラッグして正しい場所に置いてください。</span>
+      <span class="hint-en" id="ex1-hint-en">Drag each card to the correct position on the statements.</span>
+    </div>
+
+    <div class="statements-grid">
+
+      <!-- Balance Sheet -->
+      <div class="statement-card">
+        <div class="statement-header">
+          <div class="statement-name" id="bs-name"><ruby>貸借対照表<rt>たいしゃくたいしょうひょう</rt></ruby></div>
+          <div class="statement-abbr">Balance Sheet  B/S</div>
+        </div>
+        <div class="statement-cols">
+          <div class="col-group">
+            <div class="zone-label lbl-left" id="lbl-asset">
+              <ruby>資産<rt>しさん</rt></ruby>
+              <span class="lbl-en">Assets</span>
+            </div>
+            <div class="drop-zone" id="zone-asset" data-zone="asset"
+                 ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
+            </div>
+          </div>
+          <div class="col-group">
+            <div class="zone-label lbl-right" id="lbl-liab">
+              <ruby>負債<rt>ふさい</rt></ruby>
+              <span class="lbl-en">Liabilities</span>
+            </div>
+            <div class="drop-zone" id="zone-liab" data-zone="liab"
+                 ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
+            </div>
+            <div class="zone-label lbl-right" style="margin-top:5px" id="lbl-equity">
+              <ruby>資本<rt>しほん</rt></ruby>
+              <span class="lbl-en">Equity</span>
+            </div>
+            <div class="drop-zone" id="zone-equity" data-zone="equity"
+                 ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Income Statement -->
+      <div class="statement-card">
+        <div class="statement-header">
+          <div class="statement-name" id="pl-name"><ruby>損益計算書<rt>そんえきけいさんしょ</rt></ruby></div>
+          <div class="statement-abbr">Income Statement  P/L</div>
+        </div>
+        <div class="statement-cols">
+          <div class="col-group">
+            <div class="zone-label lbl-right" id="lbl-exp">
+              <ruby>費用<rt>ひよう</rt></ruby>
+              <span class="lbl-en">Expenses</span>
+            </div>
+            <div class="drop-zone" id="zone-exp" data-zone="exp"
+                 ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
+            </div>
+          </div>
+          <div class="col-group">
+            <div class="zone-label lbl-left" id="lbl-rev">
+              <ruby>収益<rt>しゅうえき</rt></ruby>
+              <span class="lbl-en">Revenue</span>
+            </div>
+            <div class="drop-zone" id="zone-rev" data-zone="rev"
+                 ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Drag Pool -->
+    <div class="drag-pool" id="drag-pool">
+      <div class="drag-pool-label" id="pool-label">↓ drag from here / ここからドラッグ</div>
+    </div>
+
+    <button class="btn-primary" onclick="checkEx1()" id="check-btn">
+      <span id="check-label">✓ こたえをみる / Check Answers</span>
+    </button>
+    <div class="result-banner" id="ex1-result"></div>
+    <button class="btn-secondary" id="reset-btn1" style="display:none" onclick="resetEx1()">
+      <span id="reset1-label">↺ もう一度 / Try Again</span>
+    </button>
+  </div>
+
+  <!-- ===== EXERCISE 2: QUIZ ===== -->
+  <div class="tab-content" id="ex2">
+    <div class="quiz-meta">
+      <div class="quiz-progress" id="q-progress">1 / 12</div>
+      <div class="score-dots" id="score-dots"></div>
+    </div>
+
+    <div class="account-card">
+      <div class="account-num" id="q-num">Q1</div>
+      <div class="account-kanji" id="q-kanji"></div>
+      <div class="account-reading" id="q-reading"></div>
+      <div class="account-english" id="q-english"></div>
+    </div>
+
+    <div class="feedback-msg" id="q-feedback"></div>
+
+    <div class="cat-grid" id="cat-grid"></div>
+
+    <button class="btn-success" id="next-btn" style="display:none" onclick="nextQ()">
+      <span id="next-label">次の問題 / Next →</span>
+    </button>
+  </div>
+
+</div><!-- end app-wrapper -->
+
+<script>
+/* ============================================================
+   DATA
+============================================================ */
+var lang = 'ja';
+
+// The 5 draggable items for Exercise 1
+var E1_ITEMS = [
+  { id: 'asset',  ja: '資産', ruby: 'しさん',    en: 'Asset',     zone: 'asset'  },
+  { id: 'liab',   ja: '負債', ruby: 'ふさい',    en: 'Liability', zone: 'liab'   },
+  { id: 'equity', ja: '資本', ruby: 'しほん',    en: 'Equity',    zone: 'equity' },
+  { id: 'exp',    ja: '費用', ruby: 'ひよう',    en: 'Expense',   zone: 'exp'    },
+  { id: 'rev',    ja: '収益', ruby: 'しゅうえき', en: 'Revenue',   zone: 'rev'    }
+];
+
+// 12 accounts for Quiz
+var ACCOUNTS = [
+  { ja: '現金',     ruby: 'げんきん',       en: 'Cash',                  cat: 'asset'  },
+  { ja: '普通預金',     ruby: 'ふつうよきん',       en: 'Ordinary Deposit',                  cat: 'asset'  },
+  { ja: '売掛金',   ruby: 'うりかけきん',   en: 'Accounts Receivable',   cat: 'asset'  },
+  { ja: '商品',     ruby: 'しょうひん',       en: 'Stock',              cat: 'asset'  },
+  { ja: '貸付金',     ruby: 'かしつけきん',       en: 'Loan',              cat: 'asset'  },
+  { ja: '建物',     ruby: 'たてもの',       en: 'Building',              cat: 'asset'  },
+  { ja: '車両運搬具',     ruby: 'しゃりょううんぱんぐ',       en: 'Vehicle Carrier',              cat: 'asset'  },
+  { ja: '備品',     ruby: 'びひん',       en: 'Equipment',              cat: 'asset'  },
+  { ja: '土地',     ruby: 'とち',       en: 'Land',              cat: 'asset'  },
+  { ja: '借入金',   ruby: 'かりいれきん',   en: 'Loans Payable',         cat: 'liab'   },
+  { ja: '買掛金',   ruby: 'かいかけきん',   en: 'Accounts Payable',      cat: 'liab'   },
+  { ja: '資本金',   ruby: 'しほんきん',     en: 'Capital Stock',         cat: 'equity' },
+  { ja: '給料',     ruby: 'きゅうりょう',   en: 'Salary Expense',        cat: 'exp'    },
+  { ja: '広告費',     ruby: 'こうこくひ',         en: 'Advertising Expenses',             cat: 'exp'    },
+  { ja: '発送費',     ruby: 'はっそうひ',         en: 'Shipping Cost',             cat: 'exp'    },
+  { ja: '旅費',     ruby: 'りょひ',         en: 'Travel Expenses',             cat: 'exp'    },
+  { ja: '交通費',     ruby: 'こうつうひ',         en: 'Transportation Expenses',             cat: 'exp'    },
+  { ja: '通信費',     ruby: 'つうしんひ',         en: 'Communication Expenses',             cat: 'exp'    },
+  { ja: '水道光熱費',     ruby: 'すいどうこうねつひ',         en: 'Water and utility costs',             cat: 'exp'    },
+  { ja: '消耗品費', ruby: 'しょうもうひんひ', en: 'Consumables Cost',          cat: 'exp'    },
+  { ja: '修繕費', ruby: 'しゅうぜんひ', en: 'Repair Costs',          cat: 'exp'    },
+  { ja: '支払家賃', ruby: 'しはらいやちん', en: 'Rent Expense',          cat: 'exp'    },
+  { ja: '支払地代', ruby: 'しはらいちだい', en: 'Paid Rent',          cat: 'exp'    },
+  { ja: '雑費', ruby: 'ざっぴ', en: 'Miscellaneous Expenses',          cat: 'exp'    },
+  { ja: '支払利息', ruby: 'しはらいりそく', en: 'Interest Expense',          cat: 'exp'    },
+  { ja: '商品販売益',     ruby: 'しょうひんはんばいえき',       en: 'Product sales profit',         cat: 'rev'    },
+  { ja: '受取利息', ruby: 'うけとりりそく', en: 'Interest Income',       cat: 'rev'    }
+];
+
+var CAT_LABELS = {
+  asset:  { ja: '資産', ruby: 'しさん',    en: 'Assets'      },
+  liab:   { ja: '負債', ruby: 'ふさい',    en: 'Liabilities' },
+  equity: { ja: '資本', ruby: 'しほん',    en: 'Equity'      },
+  exp:    { ja: '費用', ruby: 'ひよう',    en: 'Expenses'    },
+  rev:    { ja: '収益', ruby: 'しゅうえき', en: 'Revenue'    }
+};
+
+/* ============================================================
+   LANGUAGE TOGGLE
+============================================================ */
+function toggleLang() {
+  lang = lang === 'ja' ? 'en' : 'ja';
+  document.getElementById('lang-btn').textContent = lang === 'ja' ? 'English' : '日本語';
+  updateAllText();
+}
+
+function ruby(ja, rt) {
+  return lang === 'en' ? ja : '<ruby>' + ja + '<rt>' + rt + '</rt></ruby>';
+}
+
+function updateAllText() {
+  var isEn = lang === 'en';
+
+  // Header
+  document.getElementById('app-title').innerHTML =
+    '<span class="level-badge">' + (isEn ? 'Lv.4' : '4級') + '</span> ' +
+    (isEn ? 'Bookkeeping Basic Training' : ruby('簿記', 'ぼき') + ' ' + ruby('基礎', 'きそ') + 'トレーニング');
+
+  // Tabs
+  document.getElementById('tab1-main').innerHTML = isEn ? 'Position' : ruby('表', 'ひょう') + 'の' + ruby('位置', 'いち');
+  document.getElementById('tab2-main').innerHTML = isEn ? 'Classification Quiz' : ruby('分類', 'ぶんるい') + 'クイズ';
+
+  // Ex1 hints
+  document.getElementById('ex1-hint').textContent = isEn
+    ? 'Drag each card to the correct position.'
+    : 'カードをドラッグして正しい場所に置いてください。';
+  document.getElementById('ex1-hint-en').textContent = isEn
+    ? 'Tap a placed chip to remove it.'
+    : 'Drag to the correct position on the statements.';
+
+  // Statement names
+  document.getElementById('bs-name').innerHTML = isEn ? 'Balance Sheet' : ruby('貸借対照表', 'たいしゃくたいしょうひょう');
+  document.getElementById('pl-name').innerHTML = isEn ? 'Income Statement' : ruby('損益計算書', 'そんえきけいさんしょ');
+
+  // Zone labels
+  setZoneLabel('lbl-asset',  isEn ? 'Assets'      : ruby('資産', 'しさん'),       'Assets');
+  setZoneLabel('lbl-liab',   isEn ? 'Liabilities' : ruby('負債', 'ふさい'),       'Liabilities');
+  setZoneLabel('lbl-equity', isEn ? 'Equity'      : ruby('資本', 'しほん'),       'Equity');
+  setZoneLabel('lbl-exp',    isEn ? 'Expenses'    : ruby('費用', 'ひよう'),       'Expenses');
+  setZoneLabel('lbl-rev',    isEn ? 'Revenue'     : ruby('収益', 'しゅうえき'),   'Revenue');
+
+  // Buttons
+  document.getElementById('check-label').textContent  = isEn ? '✓ Check Answers'  : '✓ こたえをみる / Check Answers';
+  document.getElementById('reset1-label').textContent = isEn ? '↺ Try Again'       : '↺ もう一度 / Try Again';
+  document.getElementById('next-label').textContent   = isEn ? 'Next →'            : '次の問題 / Next →';
+
+  // Redraw drag pool chips
+  renderDragPool();
+
+  // Update placed chips text
+  document.querySelectorAll('.placed-chip').forEach(function(chip) {
+    var id = chip.dataset.id;
+    var item = E1_ITEMS.find(function(i) { return i.id === id; });
+    if (item) chip.innerHTML = isEn ? item.en : ruby(item.ja, item.ruby);
+  });
+
+  // Quiz
+  if (currentTab === 2) {
+    renderQuestion();
+    renderCatBtns();
+  }
+}
+
+function setZoneLabel(id, mainHtml, enText) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  el.innerHTML = mainHtml + '<span class="lbl-en">' + enText + '</span>';
+}
+
+/* ============================================================
+   TAB SWITCHING
+============================================================ */
+var currentTab = 1;
+
+function showTab(n) {
+  currentTab = n;
+  document.getElementById('ex1').classList.toggle('active', n === 1);
+  document.getElementById('ex2').classList.toggle('active', n === 2);
+  document.getElementById('tab1').classList.toggle('active', n === 1);
+  document.getElementById('tab2').classList.toggle('active', n === 2);
+  if (n === 2 && quizScores.length === 0) initQuiz();
+}
+
+/* ============================================================
+   EXERCISE 1 — DRAG & DROP
+============================================================ */
+var draggedId = null;
+
+// Touch drag state
+var touchDragId   = null;
+var touchCloneEl  = null;
+var touchOffsetX  = 0;
+var touchOffsetY  = 0;
+
+function renderDragPool() {
+  var pool = document.getElementById('drag-pool');
+  // Keep the label div
+  var label = document.getElementById('pool-label');
+  pool.innerHTML = '';
+  pool.appendChild(label);
+  label.textContent = lang === 'en' ? '↓ drag from here' : '↓ ここからドラッグ';
+
+  E1_ITEMS.forEach(function(item) {
+    var placed = isItemPlaced(item.id);
+    var card = document.createElement('div');
+    card.className = 'drag-card' + (placed ? ' placed' : '');
+    card.id = 'dcard-' + item.id;
+    card.dataset.id = item.id;
+    card.draggable = !placed;
+    card.innerHTML = lang === 'en' ? item.en : ruby(item.ja, item.ruby);
+
+    if (!placed) {
+      card.addEventListener('dragstart', function(e) {
+        draggedId = item.id;
+        e.dataTransfer.effectAllowed = 'move';
+        setTimeout(function() { card.style.opacity = '0.4'; }, 0);
+      });
+      card.addEventListener('dragend', function() {
+        card.style.opacity = '';
+        draggedId = null;
+      });
+      card.addEventListener('touchstart', handleTouchStart, { passive: false });
+      card.addEventListener('touchmove',  handleTouchMove,  { passive: false });
+      card.addEventListener('touchend',   handleTouchEnd,   { passive: false });
+    }
+    pool.appendChild(card);
+  });
+}
+
+function isItemPlaced(id) {
+  return !!document.querySelector('.drop-zone .placed-chip[data-id="' + id + '"]');
+}
+
+// Desktop drag
+function onDragOver(e) {
+  e.preventDefault();
+  e.currentTarget.classList.add('over');
+}
+function onDragLeave(e) {
+  e.currentTarget.classList.remove('over');
+}
+function onDrop(e) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('over');
+  if (!draggedId) return;
+  placeChip(e.currentTarget, draggedId);
+  draggedId = null;
+}
+
+// Touch drag
+function handleTouchStart(e) {
+  var card = e.currentTarget;
+  if (card.classList.contains('placed')) return;
+  e.preventDefault();
+  touchDragId = card.dataset.id;
+  var t = e.touches[0];
+  var r = card.getBoundingClientRect();
+  touchOffsetX = t.clientX - r.left;
+  touchOffsetY = t.clientY - r.top;
+  touchCloneEl = card.cloneNode(true);
+  touchCloneEl.style.cssText =
+    'position:fixed;z-index:9999;pointer-events:none;opacity:0.85;' +
+    'left:' + (t.clientX - touchOffsetX) + 'px;' +
+    'top:'  + (t.clientY - touchOffsetY) + 'px;' +
+    'margin:0;';
+  document.body.appendChild(touchCloneEl);
+}
+
+function handleTouchMove(e) {
+  if (!touchCloneEl) return;
+  e.preventDefault();
+  var t = e.touches[0];
+  touchCloneEl.style.left = (t.clientX - touchOffsetX) + 'px';
+  touchCloneEl.style.top  = (t.clientY - touchOffsetY) + 'px';
+  // Highlight zone under finger
+  document.querySelectorAll('.drop-zone').forEach(function(z) { z.classList.remove('over'); });
+  var el = document.elementFromPoint(t.clientX, t.clientY);
+  var zone = el && el.closest('.drop-zone');
+  if (zone) zone.classList.add('over');
+}
+
+function handleTouchEnd(e) {
+  if (!touchCloneEl) return;
+  e.preventDefault();
+  var t = e.changedTouches[0];
+  touchCloneEl.remove();
+  touchCloneEl = null;
+  document.querySelectorAll('.drop-zone').forEach(function(z) { z.classList.remove('over'); });
+  var el = document.elementFromPoint(t.clientX, t.clientY);
+  var zone = el && el.closest('.drop-zone');
+  if (zone && touchDragId) placeChip(zone, touchDragId);
+  touchDragId = null;
+}
+
+function placeChip(zone, id) {
+  // Only one chip per zone
+  if (zone.querySelector('[data-id="' + id + '"]')) return;
+  // Remove existing chip if zone already has one
+  var existing = zone.querySelector('.placed-chip');
+  if (existing) {
+    existing.remove();
+  }
+  var item = E1_ITEMS.find(function(i) { return i.id === id; });
+  var chip = document.createElement('div');
+  chip.className = 'placed-chip';
+  chip.dataset.id = id;
+  chip.innerHTML = lang === 'en' ? item.en : ruby(item.ja, item.ruby);
+  chip.onclick = function() {
+    chip.remove();
+    renderDragPool();
+    // Clear check feedback
+    zone.classList.remove('correct', 'wrong');
+  };
+  zone.appendChild(chip);
+  renderDragPool();
+}
+
+function checkEx1() {
+  var allCorrect = true;
+  var allFilled = true;
+  ['asset', 'liab', 'equity', 'exp', 'rev'].forEach(function(z) {
+    var zone = document.getElementById('zone-' + z);
+    var chip = zone.querySelector('.placed-chip');
+    if (!chip) { allFilled = false; zone.classList.remove('correct', 'wrong'); return; }
+    var correct = chip.dataset.id === z;
+    zone.classList.toggle('correct', correct);
+    zone.classList.toggle('wrong', !correct);
+    if (!correct) allCorrect = false;
+  });
+
+  var banner = document.getElementById('ex1-result');
+  banner.style.display = 'block';
+  if (!allFilled) {
+    banner.className = 'result-banner ng';
+    banner.innerHTML = (lang === 'en'
+      ? 'Please place all 5 cards first!'
+      : 'すべてのカードを配置してください！')
+      + '<span class="result-en">Place all 5 cards before checking.</span>';
+  } else if (allCorrect) {
+    banner.className = 'result-banner ok';
+    banner.innerHTML = '🎉 ' + (lang === 'en'
+      ? 'Perfect! All positions correct!'
+      : 'せいかい！全部正しい！')
+      + '<span class="result-en">All 5 positions correct — great work!</span>';
+  } else {
+    banner.className = 'result-banner ng';
+    banner.innerHTML = (lang === 'en'
+      ? '✗ Some positions are wrong. Check the red boxes.'
+      : '✗ まちがいがあります。赤い枠を確認してください。')
+      + '<span class="result-en">Red = wrong. Tap a chip to remove and try again.</span>';
+  }
+  document.getElementById('reset-btn1').style.display = 'block';
+}
+
+function resetEx1() {
+  ['asset', 'liab', 'equity', 'exp', 'rev'].forEach(function(z) {
+    var zone = document.getElementById('zone-' + z);
+    zone.querySelectorAll('.placed-chip').forEach(function(c) { c.remove(); });
+    zone.classList.remove('correct', 'wrong');
+  });
+  document.getElementById('ex1-result').style.display = 'none';
+  document.getElementById('reset-btn1').style.display = 'none';
+  renderDragPool();
+}
+
+/* ============================================================
+   EXERCISE 2 — QUIZ
+============================================================ */
+var quizOrder  = [];
+var quizIndex  = 0;
+var quizScores = [];
+var quizAnswered = false;
+
+function initQuiz() {
+  // Shuffle accounts
+  quizOrder = ACCOUNTS.map(function(_, i) { return i; });
+  for (var i = quizOrder.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = quizOrder[i]; quizOrder[i] = quizOrder[j]; quizOrder[j] = tmp;
+  }
+  quizIndex = 0;
+  quizScores = [];
+  quizAnswered = false;
+  renderScoreDots();
+  renderQuestion();
+  renderCatBtns();
+  document.getElementById('next-btn').style.display = 'none';
+  document.getElementById('q-feedback').className = 'feedback-msg';
+}
+
+function renderScoreDots() {
+  var bar = document.getElementById('score-dots');
+  bar.innerHTML = '';
+  ACCOUNTS.forEach(function(_, i) {
+    var dot = document.createElement('div');
+    dot.className = 'score-dot' + (i < quizScores.length ? (quizScores[i] ? ' ok' : ' ng') : '');
+    bar.appendChild(dot);
+  });
+}
+
+function renderQuestion() {
+  var acc = ACCOUNTS[quizOrder[quizIndex]];
+  var total = ACCOUNTS.length;
+  document.getElementById('q-progress').textContent = (quizIndex + 1) + ' / ' + total;
+  document.getElementById('q-num').textContent = 'Q' + (quizIndex + 1);
+
+  if (lang === 'en') {
+    document.getElementById('q-kanji').textContent   = acc.en;
+    document.getElementById('q-reading').textContent = acc.ruby;
+    document.getElementById('q-english').textContent = acc.ja;
+  } else {
+    document.getElementById('q-kanji').innerHTML    = '<ruby>' + acc.ja + '<rt>' + acc.ruby + '</rt></ruby>';
+    document.getElementById('q-reading').textContent = acc.ruby;
+    document.getElementById('q-english').textContent = acc.en;
+  }
+
+  document.getElementById('q-feedback').className = 'feedback-msg';
+  document.getElementById('next-btn').style.display = 'none';
+  quizAnswered = false;
+}
+
+function renderCatBtns() {
+  var grid = document.getElementById('cat-grid');
+  grid.innerHTML = '';
+  var cats = ['asset', 'liab', 'equity', 'exp', 'rev'];
+  cats.forEach(function(cat) {
+    var lbl = CAT_LABELS[cat];
+    var btn = document.createElement('button');
+    btn.className = 'cat-btn';
+    btn.dataset.cat = cat;
+    btn.innerHTML =
+      (lang === 'en' ? lbl.en : '<ruby>' + lbl.ja + '<rt>' + lbl.ruby + '</rt></ruby>') +
+      '<span class="cat-en">' + lbl.en + '</span>';
+    btn.onclick = function() { if (!quizAnswered) answerQuiz(cat); };
+    grid.appendChild(btn);
+  });
+}
+
+function answerQuiz(chosen) {
+  quizAnswered = true;
+  var acc = ACCOUNTS[quizOrder[quizIndex]];
+  var correct = chosen === acc.cat;
+  quizScores.push(correct);
+  renderScoreDots();
+
+  // Color buttons
+  document.querySelectorAll('.cat-btn').forEach(function(btn) {
+    btn.disabled = true;
+    if (btn.dataset.cat === acc.cat)   btn.classList.add('reveal');
+    if (btn.dataset.cat === chosen && !correct) btn.classList.add('wrong');
+    if (btn.dataset.cat === chosen && correct)  btn.classList.add('correct');
+  });
+
+  // Feedback
+  var fb = document.getElementById('q-feedback');
+  var correctLbl = CAT_LABELS[acc.cat];
+  if (correct) {
+    fb.className = 'feedback-msg ok';
+    fb.innerHTML = (lang === 'en' ? '✓ Correct!' : '✓ せいかい！') +
+      '<span class="fb-en">Great job!</span>';
+  } else {
+    fb.className = 'feedback-msg ng';
+    fb.innerHTML = (lang === 'en'
+      ? '✗ Wrong. The answer is: ' + correctLbl.en
+      : '✗ ふせいかい。こたえは「' + correctLbl.ja + '」です。') +
+      '<span class="fb-en">Answer: ' + correctLbl.en + '</span>';
+  }
+
+  // Next button
+  var nextBtn = document.getElementById('next-btn');
+  nextBtn.style.display = 'block';
+  var isLast = quizIndex === ACCOUNTS.length - 1;
+  document.getElementById('next-label').textContent = isLast
+    ? (lang === 'en' ? 'See Results' : 'けっかをみる')
+    : (lang === 'en' ? 'Next →' : '次の問題 / Next →');
+  nextBtn.onclick = isLast ? showQuizResults : nextQ;
+}
+
+function nextQ() {
+  quizIndex++;
+  renderQuestion();
+  renderCatBtns();
+}
+
+function showQuizResults() {
+  var ok = quizScores.filter(function(s) { return s; }).length;
+  var total = quizScores.length;
+  var pct = Math.round(ok / total * 100);
+
+  // Replace account card temporarily with score summary
+  var card = document.getElementById('q-kanji').closest('.account-card');
+  card.innerHTML =
+    '<div class="score-big">' + ok + '<span style="font-size:24px;color:var(--text3)">/' + total + '</span></div>' +
+    '<div class="score-label">' + (lang === 'en' ? 'Quiz Complete!' : 'クイズかんりょう！') + '</div>' +
+    '<div class="score-pct">' + pct + '%</div>';
+
+  document.getElementById('q-feedback').className = 'feedback-msg ok';
+  document.getElementById('q-feedback').innerHTML =
+    (pct === 100
+      ? (lang === 'en' ? '🎉 Perfect score! Amazing!' : '🎉 パーフェクト！すごい！')
+      : pct >= 70
+        ? (lang === 'en' ? '👏 Good job! Keep practicing.' : '👏 よくできました！')
+        : (lang === 'en' ? '📖 Keep studying — you can do it!' : '📖 もっと練習しましょう！')) +
+    '<span class="fb-en">Score: ' + ok + '/' + total + ' (' + pct + '%)</span>';
+
+  document.getElementById('next-btn').style.display = 'block';
+  document.getElementById('next-label').textContent = lang === 'en' ? '↺ Restart Quiz' : '↺ もう一度 / Restart';
+  document.getElementById('next-btn').onclick = function() { initQuiz(); };
+  document.getElementById('q-progress').textContent = total + ' / ' + total;
+}
+
+/* ============================================================
+   INIT
+============================================================ */
+renderDragPool();
+</script>
+</body>
+</html>
