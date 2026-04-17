@@ -989,6 +989,30 @@ var quizIndex  = 0;
 var quizScores = [];
 var quizAnswered = false;
 
+  var originalAccountCardHtml = '';
+
+function initQuiz() {
+  var card = document.querySelector('.account-card');
+  if (!originalAccountCardHtml) {
+    originalAccountCardHtml = card.innerHTML;
+  } else {
+    card.innerHTML = originalAccountCardHtml;
+  }
+
+  quizOrder = ACCOUNTS.map(function(_, i) { return i; });
+  for (var i = quizOrder.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = quizOrder[i]; quizOrder[i] = quizOrder[j]; quizOrder[j] = tmp;
+  }
+  quizIndex = 0;
+  quizScores = [];
+  quizAnswered = false;
+  renderScoreDots();
+  renderQuestion();
+  renderCatBtns();
+  document.getElementById('next-btn').style.display = 'none';
+  document.getElementById('q-feedback').className = 'feedback-msg';
+}
 function initQuiz() {
   // Shuffle accounts
   quizOrder = ACCOUNTS.map(function(_, i) { return i; });
